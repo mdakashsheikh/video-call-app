@@ -14,13 +14,23 @@ const RoomPage = () => {
 
     }, [ createOffer, socket ])
 
-    const handleIncommigCall = useCallback(() => { 
+    const handleIncommigCall = useCallback(async(data) => { 
+        const { from, offer } = data;
         console.log('Incomming call from')
-     }, [])
+        const ans = await createAnswer(offer)
+        socket.emit('call-accepted', { emailId: from, ans })
+
+     }, [createAnswer, socket])
 
     useEffect(() => {
         socket.on('user-joined', handleNewUserJoined)
         socket.on('incomming-call', handleIncommigCall)
+
+        return () => {
+            socket.off('user-joined', handleNewUserJoined)
+            socket.off('incomming-call', handleIncommigCall)
+        }
+
     }, [handleNewUserJoined, socket])
     return (
         <div>
