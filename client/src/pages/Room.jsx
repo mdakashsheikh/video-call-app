@@ -32,6 +32,7 @@ const RoomPage = () => {
         }
 
     }, [handleNewUserJoined, socket])
+    
     return (
         <div>
             <h1>Room Page</h1>
